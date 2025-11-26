@@ -6,7 +6,9 @@ Este projeto utiliza Terraform para provisionar o ambiente de homologação para
 
 - [Terraform](https://www.terraform.io/downloads.html) instalado.
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) instalado.
+- [Infracost](https://www.infracost.io/docs/) instalado (para estimativa de custos).
 - Logado no Azure (`az login`).
+- Chave de API do Infracost configurada (`infracost auth login`).
 
 ## Estrutura do Projeto
 
@@ -50,7 +52,21 @@ Verifique quais recursos serão criados.
 terraform plan
 ```
 
-### 4. Aplicar a Configuração
+### 4. Estimativa de Custos (Opcional)
+
+Gere um relatório de custos estimados para a infraestrutura.
+
+Se você tiver o `make` instalado:
+```powershell
+make cost
+```
+
+Ou usando o script PowerShell incluído:
+```powershell
+.\manage.ps1 -Command cost
+```
+
+### 5. Aplicar a Configuração
 
 Crie os recursos no Azure.
 
@@ -86,7 +102,7 @@ A espinha dorsal do ambiente.
     - `appgw-subnet`: Exclusiva para o Application Gateway.
     - `aca-subnet`: Delegada para o Azure Container Apps (permite que os containers rodem dentro da VNet).
     - `postgres-subnet`: Delegada para o PostgreSQL (garante que o banco não tenha acesso público direto).
-- **Application Gateway:** Atua como balanceador de carga e WAF (Web Application Firewall), sendo a única porta de entrada pública.
+- **Application Gateway:** Atua como balanceador de carga, sendo a única porta de entrada pública. Configurado como **Standard V1 Medium** (sem WAF) para redução de custos.
 
 ### 3. Computação (Containers Module)
 - **Azure Container Apps (ACA):** Ambiente Serverless para containers. Ele está configurado para usar a VNet, permitindo comunicação segura com o banco de dados.

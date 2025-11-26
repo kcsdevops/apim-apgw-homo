@@ -12,6 +12,7 @@ A **VNet** é a sua rede privada na nuvem. É como se fosse a rede local (LAN) d
     4.  **`aca-subnet` (10.0.4.0/23):** Delegada para o Container Apps. Permite que os containers tenham IPs internos dessa rede.
 
 - **NSG (Network Security Group):** É o firewall básico da rede. Atualmente temos um NSG padrão associado, permitindo o tráfego básico.
+- **Application Gateway:** Configurado com SKU **Standard V1 Medium** para otimização de custos em homologação. **Nota:** Este tier não possui WAF habilitado.
 
 ## Dicas de Melhoria (Próximos Passos)
 

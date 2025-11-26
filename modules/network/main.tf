@@ -75,8 +75,8 @@ resource "azurerm_public_ip" "agw_pip" {
   name                = "meurh360-br-agw-${var.environment}-pip"
   resource_group_name = var.resource_group_name
   location            = var.location
-  allocation_method   = "Static"
-  sku                 = "Standard"
+  allocation_method   = "Dynamic"
+  sku                 = "Basic"
   tags                = var.tags
 }
 
@@ -86,8 +86,8 @@ resource "azurerm_application_gateway" "agw" {
   location            = var.location
 
   sku {
-    name     = "Standard_v2"
-    tier     = "Standard_v2"
+    name     = "Standard_Medium"
+    tier     = "Standard"
     capacity = 2
   }
 
@@ -132,7 +132,6 @@ resource "azurerm_application_gateway" "agw" {
     http_listener_name         = "listener"
     backend_address_pool_name  = "backendPool"
     backend_http_settings_name = "httpSettings"
-    priority                   = 1
   }
 
   tags = var.tags
