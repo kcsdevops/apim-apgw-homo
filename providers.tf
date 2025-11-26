@@ -6,7 +6,7 @@ terraform {
     }
   }
   backend "azurerm" {
-    # Will be configured via init -backend-config
+    # Será configurado via init -backend-config
   }
 }
 

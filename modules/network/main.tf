@@ -1,7 +1,15 @@
-variable "resource_group_name" {}
-variable "location" {}
-variable "tags" {}
-variable "environment" {}
+variable "resource_group_name" {
+  description = "Nome do grupo de recursos"
+}
+variable "location" {
+  description = "Localização dos recursos"
+}
+variable "tags" {
+  description = "Tags para os recursos"
+}
+variable "environment" {
+  description = "Ambiente de implantação (ex: dev, homolog, prod)"
+}
 
 resource "azurerm_virtual_network" "vnet" {
   name                = "meurh360-br-vnet-${var.environment}"

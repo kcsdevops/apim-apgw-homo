@@ -1,7 +1,15 @@
-variable "resource_group_name" {}
-variable "location" {}
-variable "tags" {}
-variable "environment" {}
+variable "resource_group_name" {
+  description = "Nome do grupo de recursos"
+}
+variable "location" {
+  description = "Localização dos recursos"
+}
+variable "tags" {
+  description = "Tags para os recursos"
+}
+variable "environment" {
+  description = "Ambiente de implantação"
+}
 
 resource "azurerm_api_management" "apim" {
   name                = "meurh360-br-apim-${var.environment}"

@@ -1,23 +1,23 @@
 variable "environment" {
-  description = "Environment suffix (e.g., homolog, dev, prod)"
+  description = "Sufixo do ambiente (ex: homolog, dev, prod)"
   type        = string
   default     = "homolog"
 }
 
 variable "location" {
-  description = "Azure Region"
+  description = "Região do Azure"
   type        = string
   default     = "brazilsouth"
 }
 
 variable "resource_group_name" {
-  description = "Name of the resource group"
+  description = "Nome do grupo de recursos"
   type        = string
   default     = "rg-meurrh-360-pnt-br-apgw-02-hom"
 }
 
 variable "tags" {
-  description = "Tags to apply to resources"
+  description = "Tags para aplicar aos recursos"
   type        = map(string)
   default = {
     Project     = "MeuRH360"

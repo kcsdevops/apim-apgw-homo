@@ -13,7 +13,7 @@ resource "azurerm_postgresql_flexible_server" "psql" {
   delegated_subnet_id    = var.subnet_id
   private_dns_zone_id    = azurerm_private_dns_zone.postgres_dns.id
   administrator_login    = "psqladmin"
-  administrator_password = "ChangeMe123!" # Use KeyVault in production
+  administrator_password = "ChangeMe123!" # Usar KeyVault em produção
   zone                   = "1"
 
   storage_mb = 32768

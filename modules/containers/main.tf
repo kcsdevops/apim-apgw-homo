@@ -1,9 +1,21 @@
-variable "resource_group_name" {}
-variable "location" {}
-variable "tags" {}
-variable "environment" {}
-variable "subnet_id" {}
-variable "law_id" {}
+variable "resource_group_name" {
+  description = "Nome do grupo de recursos"
+}
+variable "location" {
+  description = "Localização dos recursos"
+}
+variable "tags" {
+  description = "Tags para os recursos"
+}
+variable "environment" {
+  description = "Ambiente de implantação"
+}
+variable "subnet_id" {
+  description = "ID da subnet para o ambiente de container apps"
+}
+variable "law_id" {
+  description = "ID do workspace do Log Analytics"
+}
 
 resource "azurerm_container_registry" "acr" {
   name                = "meurh360bracr${var.environment}"
