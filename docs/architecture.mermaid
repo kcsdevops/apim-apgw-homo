@@ -1,0 +1,38 @@
+graph TD
+    user((Usuário/Internet))
+    
+    subgraph Azure["Azure Cloud (Brazil South)"]
+        subgraph RG["Resource Group: rg-meurrh-360-pnt-br-apgw-02-hom"]
+            
+            subgraph Shared["Recursos Compartilhados"]
+                ACR["Azure Container Registry"]
+                KV["Key Vault"]
+                LAW["Log Analytics Workspace"]
+                APIM["API Management"]
+            end
+
+            subgraph VNet["VNet: meurh360-br-vnet-homolog"]
+                
+                subgraph SubnetAGW["Subnet: AppGateway"]
+                    AGW["Application Gateway (WAF)"]
+                end
+
+                subgraph SubnetACA["Subnet: Container Apps"]
+                    CAE["Container Apps Env"]
+                    APP["Container App (API)"]
+                end
+
+                subgraph SubnetDB["Subnet: Postgres"]
+                    DB[("PostgreSQL Flexible Server")]
+                end
+            end
+        end
+    end
+
+    user -->|"HTTPS/80"| AGW
+    AGW -->|"HTTP/80"| APP
+    APP -->|"TCP/5432"| DB
+    APP -.->|"Pull Image"| ACR
+    APP -.->|"Secrets"| KV
+    APP -.->|"Logs"| LAW
+    APIM -.->|"API Proxy (Opcional)"| AGW
