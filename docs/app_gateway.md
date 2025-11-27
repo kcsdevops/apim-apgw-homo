@@ -1,24 +1,29 @@
-# Application Gateway (Load Balancer & WAF)
+# Application Gateway (Load Balancer)
 
 ## O que é?
 O **Application Gateway** é um balanceador de carga inteligente para tráfego web (HTTP/HTTPS). Ele fica na frente da sua aplicação recebendo os usuários.
-Ele também possui o **WAF (Web Application Firewall)**, que protege contra ataques comuns como SQL Injection e Cross-Site Scripting (XSS).
+Nesta configuração de homologação, estamos utilizando a versão **Standard V1** para otimização de custos.
 
 ## Como está configurado?
-- **SKU:** `Standard_v2`.
-- **IP Público:** Possui um IP fixo para entrada da internet.
+- **Módulo:** modules/app_gateway
+- **SKU:** Standard_Small (Tier Standard V1).
+- **IP Público:** SKU Basic, alocação Dinâmica (requisito da V1).
 - **Backend:** Aponta para os Container Apps.
 - **Otimização:** Configurado para fazer o roteamento básico na porta 80.
 
-## Dicas de Melhoria (Próximos Passos)
+## Decisão de Arquitetura (Custos)
+Optamos pelo **Standard V1** em vez do V2 para este ambiente de homologação/dev devido à diferença significativa de preço:
+- **V2:** ~R$ 2.900,00/mês (Custo fixo alto).
+- **V1 (Small):** ~R$ 250,00 - R$ 300,00/mês (Estimado).
 
-1.  **Habilitar WAF:**
-    - *Atual:* SKU Standard (sem WAF ativado por padrão no código básico).
-    - *Melhoria:* Mudar para SKU **WAF_v2** e ativar as regras de proteção da OWASP. Isso é crucial para segurança em produção.
+## Dicas de Melhoria (Para Produção)
 
-2.  **HTTPS / SSL:**
+1.  **Migrar para V2 (Produção):**
+    - Para ambientes produtivos, recomenda-se o SKU **Standard_v2** ou **WAF_v2** para melhor performance, autoscaling e suporte a Header Rewrites.
+
+2.  **Habilitar WAF:**
+    - Caso migre para a V2, ativar o SKU **WAF_v2** para proteção contra ataques comuns (OWASP).
+
+3.  **HTTPS / SSL:**
     - *Atual:* Porta 80 (HTTP).
-    - *Melhoria:* Configurar listeners **HTTPS (443)**. Importar o certificado SSL no Key Vault e configurar o App Gateway para usá-lo. Redirecionar todo tráfego HTTP para HTTPS automaticamente.
-
-3.  **Autoscaling:**
-    - *Melhoria:* Configurar as regras de autoscaling do próprio Gateway para lidar com picos de acesso repentinos.
+    - *Melhoria:* Configurar listeners **HTTPS (443)** e importar certificados.

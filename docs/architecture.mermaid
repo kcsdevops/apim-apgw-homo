@@ -14,6 +14,7 @@ graph TD
             subgraph VNet["VNet: meurh360-br-vnet-homolog"]
                 
                 subgraph SubnetAGW["Subnet: AppGateway"]
+                    PIP["Public IP (Basic/Dynamic)"]
                     AGW["Application Gateway (Standard V1)"]
                 end
 
@@ -29,10 +30,12 @@ graph TD
         end
     end
 
-    user -->|"HTTPS/80"| AGW
-    AGW -->|"HTTP/80"| APP
+    user -->|"HTTP/80"| PIP
+    PIP --> AGW
+    AGW -->|"Rota Default (HTTP)"| APP
+    AGW -.->|"Rota /api (HTTPS)"| APIM
+    APIM -->|"Backend API"| APP
     APP -->|"TCP/5432"| DB
     APP -.->|"Pull Image"| ACR
     APP -.->|"Secrets"| KV
     APP -.->|"Logs"| LAW
-    APIM -.->|"API Proxy (Opcional)"| AGW

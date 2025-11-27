@@ -1,0 +1,35 @@
+graph TD
+    subgraph Identity["Gerenciamento de Identidade"]
+        UAI[User Assigned Identity: meurh360-br-agw-identity]
+        SP[Service Principal (Terraform)]
+    end
+
+    subgraph Secrets["Gestão de Segredos (Key Vault)"]
+        KV[Key Vault: meurh360-br-kv-homolog]
+        Secret1[Database Credentials]
+        Secret2[API Keys]
+    end
+
+    subgraph NetworkSecurity["Segurança de Rede"]
+        AGW[Application Gateway (Reverse Proxy)]
+        NSG[Network Security Groups (Firewall L4)]
+        VNetInjection[VNet Injection (Isolamento)]
+    end
+
+    subgraph DataSecurity["Segurança de Dados"]
+        Postgres[PostgreSQL (SSL Enforced)]
+        Storage[Storage Account (Encrypted)]
+    end
+
+    %% Relacionamentos
+    SP -->|"Gerencia"| KV
+    UAI -.->|"Acesso Futuro (Certificados)"| KV
+    
+    AGW -->|"Protege (Oculta Backend)"| VNetInjection
+    NSG -->|"Filtra Tráfego"| VNetInjection
+    
+    VNetInjection -->|"Acesso Privado"| Postgres
+    VNetInjection -->|"Acesso Privado"| Storage
+
+    classDef security fill:#fff3e0,stroke:#e65100,stroke-width:2px;
+    class Identity,Secrets,NetworkSecurity,DataSecurity security;

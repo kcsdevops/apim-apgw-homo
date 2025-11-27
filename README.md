@@ -76,9 +76,15 @@ terraform apply
 
 Digite `yes` quando solicitado para confirmar.
 
+### 6. Configuração de DNS
+
+Após a implantação, é necessário configurar as entradas DNS para acessar os serviços.
+Consulte o guia detalhado em: [docs/dns_configuration.md](docs/dns_configuration.md).
+
 ## Módulos
 
-- **Network**: VNet, Subnets, NSGs, App Gateway.
+- **Network**: VNet, Subnets, NSGs.
+- **App Gateway**: Application Gateway (Balanceador de Carga).
 - **Database**: PostgreSQL Flexible Server.
 - **Monitoring**: Log Analytics, App Insights.
 - **Containers**: ACR, Container Apps Environment.
@@ -134,7 +140,8 @@ graph TD
             subgraph VNet["VNet: meurh360-br-vnet-homolog"]
                 
                 subgraph SubnetAGW["Subnet: AppGateway"]
-                    AGW["Application Gateway (WAF)"]
+                    PIP["Public IP (Basic/Dynamic)"]
+                    AGW["Application Gateway (Standard V1)"]
                 end
 
                 subgraph SubnetACA["Subnet: Container Apps"]
@@ -149,11 +156,13 @@ graph TD
         end
     end
 
-    user -->|"HTTPS/80"| AGW
-    AGW -->|"HTTP/80"| APP
+    user -->|"HTTP/80"| PIP
+    PIP --> AGW
+    AGW -->|"Rota Default (HTTP)"| APP
+    AGW -.->|"Rota /api (HTTPS)"| APIM
+    APIM -->|"Backend API"| APP
     APP -->|"TCP/5432"| DB
     APP -.->|"Pull Image"| ACR
     APP -.->|"Secrets"| KV
     APP -.->|"Logs"| LAW
-    APIM -.->|"API Proxy (Opcional)"| AGW
 ```

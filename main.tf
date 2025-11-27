@@ -12,6 +12,16 @@ module "network" {
   environment         = var.environment
 }
 
+module "app_gateway" {
+  source              = "./modules/app_gateway"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  tags                = var.tags
+  environment         = var.environment
+  subnet_id           = module.network.subnet_appgw_id
+  apim_hostname       = replace(module.apim.gateway_url, "https://", "")
+}
+
 module "monitoring" {
   source              = "./modules/monitoring"
   resource_group_name = azurerm_resource_group.rg.name
